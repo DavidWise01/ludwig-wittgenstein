@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ludwig Wittgenstein — the truth table and the limits of language</title>
+<meta name="description" content="LOGIKĒ · the modern foundations — Ludwig Wittgenstein (1889–1951). In the Tractatus Logico-Philosophicus (1921) he gave the TRUTH TABLE its modern form, showed that the truths of logic are TAUTOLOGIES (true under every assignment) saying nothing about the world, and drew a boundary around what language can say. Live: a truth-table machine — build a propositional formula and watch it classify as tautology, contradiction, or contingent. Honest: the truth-table method had several near-simultaneous inventors (Peirce, Post); Wittgenstein later repudiated much of the Tractatus; he is first a philosopher. David Lee Wise, two-layer honest.">
+<style>
+  :root{--bg:#0c0f17;--panel:#121622;--panel2:#19202f;--edge:#2a3346;--ink:#ede6d6;--dim:#b3ad9a;--faint:#7c7660;
+    --ochre:#d9b66a;--ochre2:#f0d79a;--proof:#5ad1ff;--proof2:#a7e6ff;--one:#7fe0a0;--zero:#fb7185;--amber:#fbbf24;--ember:#fb923c;
+    --mono:'SFMono-Regular',ui-monospace,'Cascadia Code',Menlo,Consolas,monospace;--serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);line-height:1.58;background-image:radial-gradient(1100px 560px at 75% -10%,#1c2436 0%,transparent 55%),radial-gradient(900px 500px at 0% 100%,#14110a 0%,transparent 55%);}
+  .wrap{max-width:1000px;margin:0 auto;padding:44px 26px 90px}
+  header{border-bottom:1px solid var(--edge);padding-bottom:22px;margin-bottom:24px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--ochre);opacity:.95}
+  h1{font-family:Georgia,serif;font-size:38px;line-height:1.08;margin:.3em 0 .14em;font-weight:600}h1 em{color:var(--ochre2);font-style:italic}
+  .who{font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:.04em}
+  .sub{color:var(--dim);font-size:16px;max-width:74ch;margin-top:14px}.sub b{color:var(--ink)}
+  .verdicts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:22px 0}@media(max-width:720px){.verdicts{grid-template-columns:1fr}}
+  .vc{border:1px solid var(--edge);border-radius:11px;padding:13px 15px;border-top-width:3px;background:rgba(18,22,34,.6)}
+  .vc .badge{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.12em}
+  .vc.s{border-top-color:var(--one)}.vc.s .badge{color:var(--one)} .vc.m{border-top-color:var(--amber)}.vc.m .badge{color:var(--amber)} .vc.f{border-top-color:var(--ember)}.vc.f .badge{color:var(--ember)}
+  .vc p{font-size:12px;color:var(--dim);margin:6px 0 0;line-height:1.45}.vc p b{color:var(--ink)}
+  section{margin:36px 0}
+  h2{font-size:13px;font-family:var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--ochre2);border-left:2px solid var(--ochre);padding-left:11px;margin:0 0 6px}
+  .lede{color:var(--dim);font-size:15px;margin:0 0 18px;max-width:80ch}
+  .panel{background:linear-gradient(180deg,var(--panel),#0a0d14);border:1px solid var(--edge);border-radius:14px;padding:20px;box-shadow:0 24px 60px -40px #000}
+  .controls{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:10px}
+  button{font-family:var(--mono);font-size:12px;color:var(--ink);background:#1a2030;border:1px solid var(--edge);border-radius:8px;padding:8px 12px;cursor:pointer}button:hover{background:#222b3e;border-color:var(--ochre)}
+  .formula{font-family:var(--mono);font-size:18px;color:var(--proof2);background:#0c1622;border:1px solid var(--edge);border-radius:9px;padding:12px;text-align:center;min-height:46px;margin-bottom:6px}
+  .pal{display:flex;gap:5px;flex-wrap:wrap}
+  .sym{font-family:var(--mono);font-size:14px;padding:7px 11px;border:1px solid var(--edge);border-radius:7px;background:#1a2030;color:var(--ink);cursor:pointer}.sym:hover{border-color:var(--ochre)}
+  .tbl{border-collapse:collapse;font-family:var(--mono);font-size:13px;margin:12px auto 0}
+  .tbl th,.tbl td{border:1px solid var(--edge);padding:5px 11px;text-align:center;color:var(--dim)}
+  .tbl th{color:var(--ochre)}.tbl th.res{color:var(--ochre2)}
+  .tbl td.t{color:var(--one)}.tbl td.f{color:var(--zero)}
+  .verdict{font-family:var(--mono);font-size:15px;text-align:center;margin-top:12px;min-height:24px}
+  .verdict.taut{color:var(--one)}.verdict.contra{color:var(--zero)}.verdict.cont{color:var(--amber)}.verdict.err{color:var(--faint)}
+  .note{color:var(--dim);font-size:13.5px;border-left:2px solid var(--edge);padding-left:13px;margin:16px 0 0}.note b{color:var(--ink)}
+  .thm{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}@media(max-width:620px){.thm{grid-template-columns:1fr}}
+  .tm{border:1px solid var(--edge);border-radius:10px;padding:13px 15px;background:rgba(0,0,0,.14)}.tm b{color:var(--ochre2);font-family:var(--mono);font-size:11px}.tm p{font-size:13px;color:var(--dim);margin:6px 0 0}
+  footer{margin-top:44px;border-top:1px solid var(--edge);padding-top:18px;color:var(--faint);font-family:var(--mono);font-size:11px;line-height:1.7}
+  footer a,.bar2 a{color:var(--ochre)}.bar2{font-family:var(--mono);font-size:11.5px;margin-bottom:16px}.bar2 a{text-decoration:none;border-bottom:1px dotted #4a4126}
+  code{font-family:var(--mono);color:var(--ochre2);background:#15120a;padding:1px 5px;border-radius:5px}
+  blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--ochre);color:var(--ink);font-style:italic;font-size:15px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="bar2"><a href="https://davidwise01.github.io/ud0/">◄ UD0</a> &nbsp; <a href="https://davidwise01.github.io/emil-post/">← Post</a> &nbsp; LOGIKĒ · the modern foundations</div>
+<header>
+  <div class="kicker">LOGIKĒ · the modern foundations · the Tractatus, 1921</div>
+  <h1>Ludwig <em>Wittgenstein</em></h1>
+  <div class="who">1889 – 1951 · Vienna &amp; Cambridge · author of the Tractatus Logico-Philosophicus · student, then critic, of Russell</div>
+  <div class="sub">[[bertrand-russell]]'s most famous student wrote one short, strange, numbered book — the <b>Tractatus Logico-Philosophicus</b> (1921) — and changed how we see logic. Its key device is one you've used a hundred times without knowing whose it was: the <b>truth table</b>. Wittgenstein showed that the meaning of a compound statement is <em>nothing but</em> how its truth depends on the truth of its parts — laid out as a table of every possibility. And from that fell a startling conclusion: the truths of <b>logic</b> are <b>tautologies</b> — sentences that come out true on <em>every</em> row, no matter how the world is. Logic says nothing about reality; it shows the <em>scaffolding</em>. And what can't be put into such pictures — ethics, the mystical, the meaning of life — "whereof one cannot speak, thereof one must be silent."</div>
+</header>
+<div class="verdicts">
+  <div class="vc s"><span class="badge">✓ STRONG</span><p><b>A lasting tool, a deep insight.</b> The truth-table method is standard and correct, and the Tractatus's claim that logical truths are contentless tautologies (true in every model) is a genuine, influential clarification of what logic <em>is</em>.</p></div>
+  <div class="vc m"><span class="badge">◐ NOT THE SOLE INVENTOR</span><p><b>Truth tables had a crowd.</b> The method appears almost simultaneously in Wittgenstein, [[emil-post]], and [[charles-peirce]] (earlier still). Wittgenstein gave it philosophical weight; he did not invent it alone.</p></div>
+  <div class="vc f"><span class="badge">◔ HE TOOK IT BACK</span><p><b>The author recanted.</b> Wittgenstein later rejected much of the Tractatus's picture-theory of meaning (in the Philosophical Investigations). And he was a <em>philosopher</em> first — logic was the doorway, not the house.</p></div>
+</div>
+
+<section>
+  <h2>I · The truth-table machine</h2>
+  <p class="lede">Here is the Tractatus's instrument. Build a propositional formula from <b>p, q, r</b> and the connectives, and the machine writes out the full table — every combination of truth-values for the variables, and the result on each. Read the final column: if it's <b>all T</b>, the formula is a <b>tautology</b> (true no matter what — a truth of logic); if <b>all F</b>, a <b>contradiction</b>; if mixed, <b>contingent</b> — it actually says something about the world.</p>
+  <div class="panel">
+    <div class="formula" id="formula">p → p</div>
+    <div class="controls"><div class="pal" id="pal"></div></div>
+    <div class="controls" style="margin-bottom:0"><button id="back">⌫ delete</button><button id="clear">clear</button>
+      <span style="font-family:var(--mono);font-size:11px;color:var(--faint)">presets:</span>
+      <button class="pre" data-f="p ∨ ¬ p">p ∨ ¬p</button><button class="pre" data-f="p ∧ ¬ p">p ∧ ¬p</button>
+      <button class="pre" data-f="( p → q ) → ( ¬ q → ¬ p )">contrapositive</button><button class="pre" data-f="¬ ( p ∧ q ) ↔ ( ¬ p ∨ ¬ q )">De Morgan</button></div>
+    <table class="tbl" id="tbl"></table>
+    <div class="verdict" id="verdict"></div>
+    <div class="note">The truths of logic light up <b>all green</b> — they are <em>tautologies</em>, true on every row, and so (Wittgenstein's point) they tell you <b>nothing</b> about how things actually are; they're true in virtue of <em>form</em> alone. ⚑ This is the truth-table as a decision procedure — the great-grandparent of the SAT solver, the model checker, and every "is this always true?" a verification tool asks. Try De Morgan or the contrapositive: the machine confirms them as tautologies, exactly as [[augustus-de-morgan]] and [[george-boole]] said, now <em>seen</em> on the page.</div>
+  </div>
+  <blockquote>"The propositions of logic are tautologies. … Therefore the propositions of logic say nothing." <span style="color:var(--faint);font-style:normal;font-size:12px">— Tractatus 6.1, 6.11</span></blockquote>
+</section>
+
+<section>
+  <h2>II · The book that drew a boundary</h2>
+  <div class="thm">
+    <div class="tm"><b>MEANING IS TRUTH-CONDITION</b><p>A sentence's sense is the way its truth depends on the world — its row-by-row truth table. Compound meaning is built truth-functionally from atoms. The picture theory of the proposition.</p></div>
+    <div class="tm"><b>THE LIMIT OF THE SAYABLE</b><p>Only fact-stating, picturable propositions can be true or false. Logic shows its form but states no fact; and ethics, value, the mystical lie <em>outside</em> what language can say — to be shown, not spoken.</p></div>
+  </div>
+  <p class="lede" style="margin-top:16px">The Tractatus matters to this lineage for a precise reason: it pinned down what a <b>logical truth</b> is. After Boole and Frege built the machinery, Wittgenstein asked what its theorems really <em>amount to</em> — and answered that they amount to <em>nothing factual</em>: a tautology is true in every possible situation, so it excludes none, so it carries zero information about which situation we're in. That sounds deflationary, but it's the exact insight a computer needs: a logical validity is a formula true under <em>all</em> assignments, which is precisely what a SAT solver checks and a verifier proves. He drew the boundary of the expressible, declared everything important to lie just past it ("whereof one cannot speak…"), and famously concluded he had solved philosophy and left it to become a village schoolteacher and a gardener — before returning to overturn his own book. ⚑ The truth table you can see, and the silence at its edge. [[emil-post]] ← · next → George Boolos.</p>
+</section>
+
+<section>
+  <h2>III · The book, the recantation, the man</h2>
+  <p class="note" style="border-color:var(--amber)"><b style="color:var(--amber)">Gate kept on.</b> The logical content is <b>real and standard</b>: the truth-table method is a correct, complete decision procedure for propositional logic, and the Tractatus's identification of logical truths with <em>tautologies</em> — formulas true on every row, hence saying nothing about the world — is a genuine and lasting clarification of the nature of logic. The honest qualifications are three. On <b>priority</b>: the truth-table technique was <em>not</em> Wittgenstein's alone — it appears at virtually the same moment in [[emil-post]]'s 1921 work and, in essence, decades earlier in [[charles-peirce]]; Wittgenstein's distinctive move was philosophical (what tautologies <em>mean</em>), not the table itself. On <b>scope</b>: the Tractatus is a work of <em>philosophy</em> as much as logic — its picture theory of meaning and its mystical conclusion ("whereof one cannot speak, thereof one must be silent") are contested, and Wittgenstein himself <b>repudiated</b> much of it in his later <em>Philosophical Investigations</em>, deciding that meaning is use, not picturing. On the <b>man</b>: an Austrian steel heir who gave away a vast fortune, fought in WWI writing the Tractatus partly in the trenches, believed he had dissolved all of philosophy and quit to teach schoolchildren, then returned to Cambridge to demolish his own system — one of the strangest and most influential intellectual lives of the century. He gave logic a clean account of its own emptiness, and a tool every verifier still runs. ⚑ [[emil-post]] ← · next → George Boolos."</p>
+</section>
+
+<footer>
+  LUDWIG WITTGENSTEIN · LOGIKĒ · the modern foundations · two-layer honest<br>
+  live truth-table machine (build a propositional formula over p,q,r; full table computed; classified tautology / contradiction / contingent — verified p∨¬p = tautology, p∧¬p = contradiction, De Morgan &amp; contrapositive = tautologies)<br>
+  the Tractatus (1921) gave the truth table its modern form · logical truths = tautologies that say nothing · the limit of the sayable · later self-overturned in the Investigations<br>
+  ← <a href="https://davidwise01.github.io/emil-post/">Post</a> · next → <b>George Boolos</b> (provability logic)<br>
+  LOGIKĒ · the lineage of logical mathematics · governor David Lee Wise · CC-BY-ND-4.0
+</footer>
+</div>
+<script>
+"use strict";
+(function(){
+  const $=id=>document.getElementById(id);
+  let toks=['p','→','p'];
+  const VARS=['p','q','r'];
+  const PAL=['p','q','r','¬','∧','∨','→','↔','(',')'];
+  // tokenize the current formula array → evaluate via a tiny precedence parser
+  function evalFormula(env){
+    let i=0; const T=toks;
+    function peek(){return T[i];}
+    function atom(){ const t=T[i++];
+      if(t==='('){ const v=expr(0); i++; /*)*/ return v; }
+      if(t==='¬'){ return !atom(); }
+      if(t==='p'||t==='q'||t==='r') return !!env[t];
+      throw 0;
+    }
+    const PREC={'↔':1,'→':2,'∨':3,'∧':4};
+    function expr(min){
+      let lhs=atom();
+      while(true){ const op=peek(); if(!(op in PREC)||PREC[op]<min) break; i++;
+        const rhs=expr(op==='→'||op==='↔'?PREC[op]:PREC[op]+1); // → right-assoc-ish
+        if(op==='∧') lhs=lhs&&rhs; else if(op==='∨') lhs=lhs||rhs;
+        else if(op==='→') lhs=(!lhs)||rhs; else if(op==='↔') lhs=(lhs===rhs);
+      }
+      return lhs;
+    }
+    const v=expr(0); if(i!==T.length) throw 0; return v;
+  }
+  function render(){
+    $('formula').textContent=toks.join(' ')||'(empty)';
+    $('pal').innerHTML=PAL.map(s=>'<span class="sym" data-s="'+s+'">'+s+'</span>').join('');
+    $('pal').querySelectorAll('.sym').forEach(e=>e.onclick=()=>{toks.push(e.dataset.s);render();});
+    const used=VARS.filter(v=>toks.includes(v));
+    let ok=true, results=[];
+    let h='<tr>'+used.map(v=>'<th>'+v+'</th>').join('')+'<th class="res">'+ (toks.join(' ')||'?') +'</th></tr>';
+    const n=used.length;
+    if(n===0){ $('tbl').innerHTML=''; $('verdict').className='verdict err'; $('verdict').textContent='add at least one variable'; return; }
+    for(let m=0;m<(1<<n);m++){
+      const env={}; used.forEach((v,j)=>env[v]=!!((m>>(n-1-j))&1));
+      let r; try{ r=evalFormula(env); }catch(e){ ok=false; break; }
+      results.push(r);
+      h+='<tr>'+used.map(v=>'<td class="'+(env[v]?'t':'f')+'">'+(env[v]?'T':'F')+'</td>').join('')+'<td class="'+(r?'t':'f')+'" style="font-weight:700">'+(r?'T':'F')+'</td></tr>';
+    }
+    if(!ok){ $('tbl').innerHTML=''; $('verdict').className='verdict err'; $('verdict').textContent='malformed formula'; return; }
+    $('tbl').innerHTML=h;
+    const allT=results.every(x=>x), allF=results.every(x=>!x);
+    const v=$('verdict');
+    if(allT){ v.className='verdict taut'; v.innerHTML='✓ TAUTOLOGY — true on every row. A truth of logic; it says nothing about the world.'; }
+    else if(allF){ v.className='verdict contra'; v.innerHTML='✗ CONTRADICTION — false on every row. Logically impossible.'; }
+    else { v.className='verdict cont'; v.innerHTML='◐ CONTINGENT — true on some rows, false on others. It actually says something.'; }
+  }
+  $('back').onclick=()=>{toks.pop();render();};
+  $('clear').onclick=()=>{toks=[];render();};
+  document.querySelectorAll('.pre').forEach(b=>b.onclick=()=>{ toks=b.dataset.f.split(' '); render(); });
+  render();
+})();
+</script>
+</body>
+</html>
